@@ -1,0 +1,600 @@
+/* =========================================================================
+   MM Recruitment Ltd - Design System
+   Independent brand identity - deliberately NOT sharing tokens/styles
+   with the Laurus Recruitment site, matching this ecosystem's own
+   convention of independent brands per project.
+
+   Palette (as supplied in the brief - do not adjust without approval):
+     Warm ivory     #FAF7F1
+     Rich gold      #B18A43
+     Light champagne#E9D7B4
+     Charcoal       #26231F
+     White          #FFFFFF
+
+   Typography: Fraunces (display serif - warm, luxurious, restrained)
+   for headings/wordmark, Inter (humanist sans) for body text and UI.
+   Both loaded from Google Fonts - see the <link> tags in every page's
+   <head>.
+   ========================================================================= */
+
+:root {
+  --ivory: #FAF7F1;
+  --gold: #B18A43;
+  /* A deliberately darker shade than the approved #B18A43 for TEXT on
+     light backgrounds only (links, small labels) - #B18A43 itself only
+     measures ~3.2:1 against white/ivory, below WCAG AA's 4.5:1 for
+     normal text. #8a6b2c measures ~4.65-5:1 against ivory/white while
+     staying visibly the same gold family. --gold itself is unchanged
+     and still used for backgrounds, borders, buttons and large/
+     decorative elements, where this contrast rule doesn't apply. */
+  --gold-dark: #8a6b2c;
+  --champagne: #E9D7B4;
+  --charcoal: #26231F;
+  --white: #FFFFFF;
+
+  --text: var(--charcoal);
+  --text-muted: rgba(38, 35, 31, 0.66);
+  --hairline: rgba(38, 35, 31, 0.12);
+  --surface: var(--white);
+  --surface-warm: var(--champagne);
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-lg: 28px;
+  --shadow-soft: 0 20px 60px -30px rgba(38, 35, 31, 0.35);
+  --container-width: 1180px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--charcoal);
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 500; }
+h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+h3 { font-size: 1.35rem; }
+
+p { margin: 0 0 1em; }
+a { color: var(--gold-dark); }
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin: 0 0 14px;
+}
+
+.section {
+  padding: clamp(56px, 8vw, 110px) 0;
+}
+.section-tight { padding: clamp(40px, 6vw, 72px) 0; }
+.section-warm { background: var(--surface-warm); }
+.section-charcoal { background: var(--charcoal); color: rgba(255,255,255,0.88); }
+.section-charcoal h2, .section-charcoal h3 { color: var(--white); }
+.section-charcoal .eyebrow { color: var(--champagne); }
+
+.section-heading {
+  max-width: 680px;
+  margin: 0 0 40px;
+}
+.section-heading.centered { margin-left: auto; margin-right: auto; text-align: center; }
+
+/* -------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.96rem;
+  padding: 14px 30px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+.button.primary {
+  background: var(--gold);
+  color: var(--white);
+  box-shadow: 0 14px 30px -14px rgba(177, 138, 67, 0.65);
+}
+.button.primary:hover { background: var(--gold-dark); transform: translateY(-1px); }
+.button.secondary {
+  background: transparent;
+  color: var(--charcoal);
+  border-color: var(--charcoal);
+}
+.button.secondary:hover { background: var(--charcoal); color: var(--white); }
+.button.on-dark {
+  border-color: rgba(255,255,255,0.5);
+  color: var(--white);
+}
+.button.on-dark:hover { background: var(--white); color: var(--charcoal); border-color: var(--white); }
+.button.disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.button.disabled:hover, .button[aria-disabled="true"]:hover { transform: none; }
+.button-row { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* -------------------------------------------------------------------
+   Header / navigation
+   ------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(250, 247, 241, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 24px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Reserved slot for the approved gold angel-and-daisy mark, supplied
+   separately - NEVER filled with an invented substitute. Zero-size
+   until assets/images/mm-recruitment-logo.svg (or .png) exists; see
+   docs/DESIGN-SYSTEM.md "Logo" section for the exact swap instructions.
+   Deliberately not a monogram/icon placeholder either - the brief is
+   explicit that no substitute should be invented, so this stays empty
+   rather than approximating the real mark. */
+.logo-mark {
+  display: inline-block;
+  width: 0;
+  height: 44px;
+  overflow: hidden;
+}
+.logo-mark img { height: 44px; width: auto; display: block; }
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--charcoal);
+}
+.wordmark .accent { color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.nav-links a:hover, .nav-links a[aria-current="page"] { border-color: var(--gold); color: var(--gold-dark); }
+.nav-cta { display: flex; align-items: center; gap: 10px; }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: var(--white);
+  cursor: pointer;
+}
+.nav-toggle span { display: block; width: 18px; height: 2px; margin: 0 auto; background: var(--charcoal); transition: transform 0.2s ease, opacity 0.2s ease; }
+.nav-toggle.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* -------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------- */
+.hero {
+  padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 90px);
+  background:
+    radial-gradient(60% 55% at 85% 8%, rgba(233, 215, 180, 0.55), transparent 60%),
+    var(--ivory);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+.hero h1 { margin-bottom: 22px; }
+.hero-lede { font-size: 1.15rem; color: var(--text-muted); max-width: 46ch; margin-bottom: 32px; }
+.hero-media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: var(--shadow-soft);
+}
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.hero-media .media-caption {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  right: 18px;
+  background: rgba(38, 35, 31, 0.55);
+  color: var(--white);
+  font-size: 0.82rem;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(4px);
+}
+
+/* Generic placeholder media block, used wherever real photography has
+   not yet been supplied - warm gradient + a daisy motif, never a stock
+   photo pretending to be MM Recruitment's own imagery. */
+.media-placeholder {
+  background: linear-gradient(155deg, var(--champagne) 0%, var(--ivory) 60%);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dark);
+  position: relative;
+  overflow: hidden;
+}
+.media-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(177,138,67,0.18) 1.5px, transparent 1.6px);
+  background-size: 22px 22px;
+  opacity: 0.6;
+}
+.media-placeholder .placeholder-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* -------------------------------------------------------------------
+   Cards / grids
+   ------------------------------------------------------------------- */
+.grid { display: grid; gap: 24px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 30px 28px;
+  border: 1px solid var(--hairline);
+}
+.card.on-warm { background: var(--white); }
+.card h3 { margin-bottom: 10px; }
+.card p:last-child { margin-bottom: 0; }
+
+.value-card {
+  text-align: left;
+  padding: 26px 24px;
+  border-radius: var(--radius);
+  background: var(--white);
+  border: 1px solid var(--hairline);
+}
+.value-card .value-index {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--gold-dark);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.icon-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--champagne);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: var(--gold-dark);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+/* -------------------------------------------------------------------
+   Split sections (image + copy)
+   ------------------------------------------------------------------- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+.split.reverse .split-media { order: 2; }
+.split-media { aspect-ratio: 5/4; }
+
+/* -------------------------------------------------------------------
+   Quote / brand statement banner
+   ------------------------------------------------------------------- */
+.statement-banner {
+  padding: clamp(56px, 8vw, 96px) 0;
+  text-align: center;
+  background: var(--charcoal);
+  color: var(--white);
+}
+.statement-banner blockquote {
+  margin: 0 auto;
+  max-width: 820px;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.statement-banner cite {
+  display: block;
+  margin-top: 20px;
+  font-style: normal;
+  color: var(--champagne);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* -------------------------------------------------------------------
+   Forms
+   ------------------------------------------------------------------- */
+.form-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(28px, 4vw, 44px);
+  border: 1px solid var(--hairline);
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.form-field.full { grid-column: 1 / -1; }
+.form-field label { font-weight: 600; font-size: 0.9rem; }
+.form-field .hint { font-size: 0.8rem; color: var(--text-muted); }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  font: inherit;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--hairline);
+  background: var(--ivory);
+  color: var(--text);
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(177, 138, 67, 0.18);
+}
+.form-consent { display: flex; align-items: flex-start; gap: 10px; margin: 6px 0 22px; font-size: 0.88rem; color: var(--text-muted); }
+.form-consent input { margin-top: 4px; }
+.form-message { min-height: 1.4em; font-weight: 600; margin-top: 4px; }
+.form-message.is-error { color: #a3312c; }
+.form-message.is-success { color: #3f6b3f; }
+
+/* -------------------------------------------------------------------
+   "Not yet available" portal mockups - Phase 1 explicitly requires
+   these to be visibly, honestly inert. Never styled to look like a
+   working sign-in form.
+   ------------------------------------------------------------------- */
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--champagne);
+  color: var(--gold-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+.mock-portal-panel {
+  background: var(--white);
+  border: 1px dashed var(--gold);
+  border-radius: var(--radius);
+  padding: clamp(28px, 4vw, 40px);
+  position: relative;
+}
+.mock-portal-panel fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0.55;
+}
+.mock-portal-panel fieldset[disabled] * { cursor: not-allowed; }
+.mock-portal-note {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* -------------------------------------------------------------------
+   Footer
+   ------------------------------------------------------------------- */
+.site-footer {
+  background: var(--charcoal);
+  color: rgba(255,255,255,0.75);
+  padding: 56px 0 28px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+.footer-grid h4 { color: var(--white); font-family: var(--font-body); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.footer-grid a { color: rgba(255,255,255,0.75); text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.92rem; }
+.footer-grid a:hover { color: var(--champagne); }
+.footer-brand .wordmark { color: var(--white); }
+.footer-brand p { color: rgba(255,255,255,0.6); font-size: 0.9rem; max-width: 32ch; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+}
+.powered-by-los {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.55);
+}
+.powered-by-los .los-mark { color: var(--champagne); font-weight: 600; }
+
+/* -------------------------------------------------------------------
+   Legal pages
+   ------------------------------------------------------------------- */
+.legal-content { max-width: 760px; }
+.legal-content h2 { margin-top: 2em; }
+.legal-content ul { padding-left: 1.2em; }
+.tbc {
+  background: rgba(177, 138, 67, 0.16);
+  color: var(--gold-dark);
+  padding: 1px 7px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 0.92em;
+}
+.review-banner {
+  background: var(--champagne);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  font-size: 0.92rem;
+}
+.review-banner strong { display: block; margin-bottom: 4px; }
+
+/* -------------------------------------------------------------------
+   Utility
+   ------------------------------------------------------------------- */
+.text-muted { color: var(--text-muted); }
+.mt-0 { margin-top: 0; }
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  background: var(--charcoal);
+  color: var(--white);
+  padding: 12px 18px;
+  border-radius: 0 0 8px 0;
+  z-index: 100;
+}
+.skip-link:focus { left: 0; top: 0; }
+
+/* -------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero-grid, .split, .split.reverse .split-media { grid-template-columns: 1fr; }
+  .split.reverse .split-media { order: 0; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 720px) {
+  .nav-links, .nav-cta .button { display: none; }
+  .nav-toggle { display: flex; }
+  #site-nav.is-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    padding: 20px 24px 26px;
+    border-bottom: 1px solid var(--hairline);
+    gap: 16px;
+  }
+  #site-nav.is-open .nav-cta { display: flex; flex-direction: column; align-items: stretch; }
+  #site-nav.is-open .nav-cta .button { display: inline-flex; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}

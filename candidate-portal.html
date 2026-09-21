@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Get in touch with MM Recruitment Ltd - whether you're looking for your next opportunity, your next team member, or just want to know more about us." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://mmrecruitmentltd.co.uk/contact.html" />
-  <title>Contact Us | MM Recruitment Ltd</title>
+  <meta name="description" content="A preview of the MM Recruitment candidate portal - registration and sign-in are not yet available." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://mmrecruitmentltd.co.uk/candidate-portal.html" />
+  <title>Candidate Portal (Preview) | MM Recruitment Ltd</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -30,9 +30,9 @@
         <a href="candidates.html">For Candidates</a>
         <a href="employers.html">For Employers</a>
         <a href="people-consultancy.html">People Consultancy</a>
-        <a href="contact.html" aria-current="page">Contact</a>
+        <a href="contact.html">Contact</a>
         <div class="nav-cta">
-          <a href="candidate-portal.html" class="button secondary">Candidate Portal</a>
+          <a href="candidate-portal.html" class="button secondary" aria-current="page">Candidate Portal</a>
           <a href="employer-portal.html" class="button primary">Employer Portal</a>
         </div>
       </nav>
@@ -41,60 +41,57 @@
 
   <main id="main">
     <section class="hero" style="padding-bottom: 32px;">
-      <div class="container">
-        <p class="eyebrow">Contact</p>
-        <h1 style="max-width: 18ch;">Let's start a conversation.</h1>
-        <p class="hero-lede">Whether you're looking for your next opportunity, your next team member, or just have a question - we'd love to hear from you.</p>
+      <div class="container" style="max-width:680px;">
+        <span class="coming-soon-badge">Preview only - not yet available</span>
+        <h1 style="max-width:16ch;">Your candidate portal, on its way.</h1>
+        <p class="hero-lede">This is an early look at how your MM Recruitment candidate account will look and feel. Registration and sign-in are not switched on yet - nothing below is a working login.</p>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container split">
-        <div>
-          <h2>Get in touch</h2>
-          <div class="card" style="margin-bottom:20px;">
-            <h3>Email</h3>
-            <p><span class="tbc">Contact email - TBC</span></p>
-          </div>
-          <div class="card" style="margin-bottom:20px;">
-            <h3>Phone</h3>
-            <p><span class="tbc">Contact phone number - TBC</span></p>
+    <section class="section" style="padding-top:0;">
+      <div class="container" style="max-width:520px;">
+        <div class="mock-portal-panel">
+          <span class="coming-soon-badge">Coming soon</span>
+          <h2 style="font-size:1.4rem;">Sign in to your account</h2>
+          <fieldset disabled aria-disabled="true">
+            <div class="form-field">
+              <label for="mock-email">Email address</label>
+              <input type="email" id="mock-email" placeholder="you@example.com" />
+            </div>
+            <div class="form-field">
+              <label for="mock-password">Password</label>
+              <input type="password" id="mock-password" placeholder="••••••••" />
+            </div>
+            <button type="button" class="button primary" disabled aria-disabled="true" style="width:100%;">Sign in</button>
+          </fieldset>
+          <p class="mock-portal-note">
+            This is a visual preview built with MM Recruitment's own branding. Candidate registration and sign-in have not been built or connected yet - see our <a href="contact.html">contact page</a> if you'd like to speak to us in the meantime.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-warm">
+      <div class="container">
+        <div class="section-heading centered">
+          <p class="eyebrow">What to expect</p>
+          <h2>What your portal will offer</h2>
+        </div>
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Your profile</h3>
+            <p>Keep your details, experience and CV up to date in one place.</p>
           </div>
           <div class="card">
-            <h3>Address</h3>
-            <p><span class="tbc">Registered/office address - TBC</span></p>
+            <h3>Your applications</h3>
+            <p>Track the roles you've been put forward for and where things stand.</p>
+          </div>
+          <div class="card">
+            <h3>Messages from us</h3>
+            <p>Hear directly from your MM Recruitment consultant as things progress.</p>
           </div>
         </div>
-
-        <form class="form-card" data-enquiry-form="contact" novalidate>
-          <div class="form-field">
-            <label for="contact-name">Your name</label>
-            <input type="text" id="contact-name" name="name" autocomplete="name" required />
-          </div>
-          <div class="form-field">
-            <label for="contact-email">Email address</label>
-            <input type="email" id="contact-email" name="email" autocomplete="email" required />
-          </div>
-          <div class="form-field">
-            <label for="contact-phone">Phone number <span class="hint">(optional)</span></label>
-            <input type="tel" id="contact-phone" name="phone" autocomplete="tel" />
-          </div>
-          <div class="form-field">
-            <label for="contact-message">Your message</label>
-            <textarea id="contact-message" name="message" rows="5" required></textarea>
-          </div>
-          <!-- Honeypot - hidden from real visitors, only a bot fills this in. -->
-          <div class="visually-hidden" aria-hidden="true">
-            <label for="contact-company-website">Leave this field blank</label>
-            <input type="text" id="contact-company-website" name="company_website" tabindex="-1" autocomplete="off" />
-          </div>
-          <label class="form-consent">
-            <input type="checkbox" name="consent" required />
-            <span>I'm happy for MM Recruitment Ltd to contact me about my enquiry. See our <a href="privacy-policy.html">Privacy Policy</a> for how we handle your information.</span>
-          </label>
-          <button type="submit" class="button primary">Send message</button>
-          <p class="form-message" role="status" aria-live="polite"></p>
-        </form>
+        <p class="text-muted" style="margin-top:24px;">These are the features we're designing towards as part of our technology integration.</p>
       </div>
     </section>
   </main>
