@@ -70,9 +70,16 @@ non-accessible fake buttons next to the page's real ones. The site's
 own live `<h1>`, lede and CTA buttons in the hero section were left
 untouched.
 
-Still pending: the homepage's remaining "Hiring for your team?"
-`.split-media`, and every placeholder on `about.html`,
-`candidates.html`, `employers.html`, and `people-consultancy.html`.
+The homepage's last slot, "Hiring for your team?", is filled too:
+`assets/images/photography/employer-team-collaboration.jpg`, two
+engineering colleagues examining a component together on a workshop
+bench (cropped from a wider AI-generated image that also included
+ambient wall signage, trimmed out here for a tighter 5:4 crop). With
+this, every image slot on `index.html` now has a real photo.
+
+Still pending: every placeholder on `about.html` (including the
+founder photo), `candidates.html`, `employers.html`, and
+`people-consultancy.html`.
 
 ## Founder photograph
 
