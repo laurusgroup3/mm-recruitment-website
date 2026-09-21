@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us | MM Recruitment Ltd</title>
+  <meta name="description" content="Get in touch with MM Recruitment Ltd.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.svg" alt="MM Recruitment Ltd logo">
+        <span class="brand-name">MM Recruitment</span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="jobs.html">Find a Job</a>
+        <a href="employers.html">For Employers</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="nav-cta active">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Get in Touch</h1>
+        <p class="lede">Whether you're looking for a role or looking to hire, we'd like to hear from you.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <form id="contact-form">
+          <div class="form-row">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-row">
+            <label for="inquiry-type">I am a...</label>
+            <select id="inquiry-type" name="inquiry-type">
+              <option value="candidate">Candidate looking for a role</option>
+              <option value="employer">Employer looking to hire</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </div>
+        </form>
+        <p style="text-align:center; color: var(--color-ink-soft);">
+          Note: this form is not yet connected to a backend. Submissions will not be sent until form handling is wired up.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>MM Recruitment Ltd</h4>
+          <p>A recruitment consultancy built around straightforward advice and a fair process for candidates and employers alike.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="jobs.html">Find a Job</a><br>
+          <a href="employers.html">For Employers</a><br>
+          <a href="about.html">About Us</a><br>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Details coming soon.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; <span id="year"></span> MM Recruitment Ltd. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert('Form submission is not yet connected. This is a placeholder for the initial site foundation.');
+    });
+  </script>
+</body>
+</html>
