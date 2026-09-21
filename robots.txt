@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# candidate-portal.html/employer-portal.html are excluded from search
+# results via their own <meta name="robots" content="noindex, follow">
+# tag, not blocked here - a robots.txt Disallow would stop search
+# engines reading that tag at all, which can paradoxically leave a
+# bare URL indexed with no content. This lets them be crawled (so the
+# noindex is honoured) while never appearing in search results.
+
+Sitemap: https://mmrecruitmentltd.co.uk/sitemap.xml
