@@ -406,7 +406,13 @@ a { color: var(--gold-dark); }
   align-items: center;
 }
 .split.reverse .split-media { order: 2; }
-.split-media { aspect-ratio: 5/4; }
+.split-media {
+  aspect-ratio: 5/4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.split-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* -------------------------------------------------------------------
    Quote / brand statement banner

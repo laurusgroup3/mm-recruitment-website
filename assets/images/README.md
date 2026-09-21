@@ -39,9 +39,28 @@ Every hero/split-section image on the site is currently a
 `.media-placeholder` (a warm gradient block with a text label), never a
 stock photo standing in as MM Recruitment's own. As real photography
 featuring genuine human connection is supplied, replace each
-`.media-placeholder` block with a real `<img>` (see `index.html`'s
-`.hero-media` for the working example of an already-real image slot's
-markup shape) and remove the placeholder styling from that instance.
+`.media-placeholder` block with a real `<img>` and remove the
+placeholder styling from that instance.
+
+`index.html`'s "Who we are" split section (`.split-media` between the
+"Who we are" copy and the values grid) is the first filled slot - see
+its markup for the working example: a plain `<img>` inside
+`.split-media` (no `media-placeholder` class), sized to the source
+file's intrinsic `width`/`height`, `loading="lazy"`, and descriptive
+`alt` text that describes the scene without naming or implying any
+specific real person. The image itself lives at
+`assets/images/photography/consultant-candidate-conversation.jpg` - an
+AI-generated photograph (not a real MM Recruitment consultant, candidate
+or client), optimised as a progressive JPEG. `assets/css/style.css`'s
+`.split-media`/`.split-media img` rules (added alongside this image)
+give any real photo dropped into a `.split-media` slot the same
+rounded-corner, shadowed treatment as `.hero-media`, cropped via
+`object-fit: cover`.
+
+Still pending: the homepage hero (`.hero-media`, 4:5), the two other
+homepage `.split-media` placeholders, and every placeholder on
+`about.html`, `candidates.html`, `employers.html`, and
+`people-consultancy.html`.
 
 ## Founder photograph
 
