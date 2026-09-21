@@ -77,9 +77,20 @@ bench (cropped from a wider AI-generated image that also included
 ambient wall signage, trimmed out here for a tighter 5:4 crop). With
 this, every image slot on `index.html` now has a real photo.
 
-Still pending: every placeholder on `about.html` (including the
-founder photo), `candidates.html`, `employers.html`, and
-`people-consultancy.html`.
+`about.html`'s "Our philosophy" split is filled too:
+`assets/images/photography/philosophy-team-discussion.jpg` - four
+colleagues in plain (unbranded) office attire discussing notes
+together. A separate AI-generated photo showing the same scene but
+with the group wearing "MM RECRUITMENT"-branded polo shirts was
+deliberately not used here or anywhere else on the site - on a company
+page in particular, branded workwear reads as a claim that these are
+real MM Recruitment staff, which they are not.
+
+Still pending: `about.html`'s founder photo (`.split-media`, 1:1 -
+must be the real founder, never a stand-in), and every placeholder on
+`candidates.html` and `employers.html` (both currently just "Portal
+preview" mockup slots, not photography) and `people-consultancy.html`
+(no image slots exist on that page yet).
 
 ## Founder photograph
 
