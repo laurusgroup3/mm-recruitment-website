@@ -59,10 +59,20 @@ candidates or clients), optimised as progressive JPEGs.
 `.split-media` slot the same rounded-corner, shadowed treatment as
 `.hero-media`, cropped via `object-fit: cover`.
 
-Still pending: the homepage hero (`.hero-media`, 4:5), the homepage's
-remaining "Hiring for your team?" `.split-media`, and every placeholder
-on `about.html`, `candidates.html`, `employers.html`, and
-`people-consultancy.html`.
+The homepage hero (`.hero-media`) is also filled now:
+`assets/images/photography/hero-consultant-portrait.jpg`, a warm 4:5
+portrait crop of a recruitment consultant mid-conversation. It's
+cropped from a wider AI-generated image that also included a full
+marketing overlay (headline, body copy and "FOR CANDIDATES"/"FOR
+EMPLOYERS" buttons baked into the pixels) - only the clean photographic
+region was kept, specifically to avoid shipping non-clickable,
+non-accessible fake buttons next to the page's real ones. The site's
+own live `<h1>`, lede and CTA buttons in the hero section were left
+untouched.
+
+Still pending: the homepage's remaining "Hiring for your team?"
+`.split-media`, and every placeholder on `about.html`,
+`candidates.html`, `employers.html`, and `people-consultancy.html`.
 
 ## Founder photograph
 
