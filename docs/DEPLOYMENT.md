@@ -64,9 +64,7 @@ been reviewed and approved.
 - [ ] Every `class="tbc"` placeholder in the legal pages and Contact
       page has been replaced with a confirmed, real value (registered
       address, company number, contact email/phone, ICO registration).
-- [ ] The approved logo has been added (see
-      `assets/images/README.md`) - the site should not go live with the
-      empty `.logo-mark` placeholder if the asset is available by then.
+- [x] The approved logo has been added (see `assets/images/README.md`).
 - [ ] Real photography has replaced the `.media-placeholder` blocks, or
       a decision has been made to launch with placeholders and revisit.
 - [ ] Contact and Employer Enquiry forms tested end-to-end on the

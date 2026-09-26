@@ -16,10 +16,10 @@ page).
 
 ## Logo
 
-**Not yet supplied.** See `assets/images/README.md` for the exact,
-step-by-step instructions for dropping in the approved gold
-angel-and-daisy mark once it arrives, including why a substitute was
-deliberately never invented in its place.
+Live: the approved gold angel-and-daisy mark + "MM Recruitment"
+wordmark, in every page's header. See `assets/images/README.md` for
+what was cropped from the supplied artwork (the tagline line, for the
+header; a favicon-only icon crop for the tab icon) and why.
 
 ## Colour tokens
 

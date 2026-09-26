@@ -188,20 +188,16 @@ a { color: var(--gold-dark); }
   color: inherit;
 }
 
-/* Reserved slot for the approved gold angel-and-daisy mark, supplied
-   separately - NEVER filled with an invented substitute. Zero-size
-   until assets/images/mm-recruitment-logo.svg (or .png) exists; see
-   docs/DESIGN-SYSTEM.md "Logo" section for the exact swap instructions.
-   Deliberately not a monogram/icon placeholder either - the brief is
-   explicit that no substitute should be invented, so this stays empty
-   rather than approximating the real mark. */
+/* The approved logo lockup (angel-and-daisy mark + "MM Recruitment"
+   wordmark, cropped from the supplied artwork with its fine-print
+   tagline line removed - illegible at header size). Carries the brand
+   name itself, so the header no longer pairs it with a separate live
+   text wordmark. */
 .logo-mark {
   display: inline-block;
-  width: 0;
-  height: 44px;
-  overflow: hidden;
+  height: 52px;
 }
-.logo-mark img { height: 44px; width: auto; display: block; }
+.logo-mark img { height: 52px; width: auto; display: block; }
 
 .wordmark {
   font-family: var(--font-display);
@@ -620,6 +616,7 @@ a { color: var(--gold-dark); }
 @media (max-width: 720px) {
   .nav-links, .nav-cta .button { display: none; }
   .nav-toggle { display: flex; }
+  .logo-mark, .logo-mark img { height: 40px; }
   #site-nav.is-open {
     display: flex;
     flex-direction: column;

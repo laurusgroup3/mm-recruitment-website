@@ -1,37 +1,30 @@
-# Image assets - pending
+# Image assets
 
-## Logo (blocking)
+## Logo
 
-The approved logo - a gold angel silhouette holding a daisy, positioned
-to the left of the MM Recruitment Ltd wordmark - has not been supplied
-yet. No substitute has been invented anywhere in this site; every page
-ships a reserved, zero-width `.logo-mark` slot in the header instead
-(see `assets/css/style.css`'s own comment on that class).
+The approved logo (gold angel silhouette holding a daisy, "MM
+Recruitment" wordmark) is live: `assets/images/mm-recruitment-logo.png`,
+used in every page's header `.logo-mark` span, replacing the old
+reserved empty slot and the separate live-text `.wordmark` (now
+redundant since the image carries the brand name itself; the footer's
+own separate `.wordmark` text is untouched).
 
-**To add the real logo once supplied:**
+The supplied artwork was a full lockup - icon + "MM Recruitment" +
+a "PEOPLE · TALENT · OPPORTUNITY" tagline line. Only the icon+wordmark
+portion is used in the header; the tagline row was cropped out since it
+would be illegible at header height (~52px desktop, 40px mobile - see
+`assets/css/style.css`'s `.logo-mark` rules and the `@media (max-width:
+720px)` override). The source file was resized down from its original
+~1500px width to a ~3x-retina-appropriate 540px, since the header never
+displays it wider than ~130px.
 
-1. Save the approved file here as `mm-recruitment-logo.svg` (preferred
-   - scales cleanly at any size) or `mm-recruitment-logo.png` (at least
-   200px tall, transparent background).
-2. In every page's `<header>`, replace:
-   ```html
-   <span class="logo-mark"></span>
-   ```
-   with:
-   ```html
-   <span class="logo-mark">
-     <img src="assets/images/mm-recruitment-logo.svg" alt="MM Recruitment Ltd" width="44" height="44" />
-   </span>
-   ```
-3. Remove the `width: 0;` rule's effect by confirming `.logo-mark img`
-   in `style.css` renders at the size you want (already set to 44px
-   tall) - the `.logo-mark` wrapper itself only needs `width: auto`
-   once it has real content; no other CSS change should be needed.
-4. Repeat across every HTML file that has a `.logo-mark` span (every
-   page in this repository) - there is no shared header partial in this
-   plain-HTML build, so this is a find-and-replace across files, not a
-   one-line change. A quick check: `grep -rl "logo-mark></span>" .`
-   should return nothing once every page has been updated.
+`favicon.ico` (repo root) and `assets/images/favicon-32x32.png` /
+`favicon-16x16.png` / `apple-touch-icon.png` are cropped from the same
+artwork's icon-only figure (the daisy itself couldn't be cleanly
+separated from the wordmark at favicon scale - the two overlap in the
+source art - so the favicon uses the dancing-figure glyph alone).
+Referenced via `<link rel="icon">`/`<link rel="apple-touch-icon">` in
+every page's `<head>`.
 
 ## Photography
 
