@@ -79,15 +79,19 @@ deliberately not used here or anywhere else on the site - on a company
 page in particular, branded workwear reads as a claim that these are
 real MM Recruitment staff, which they are not.
 
-Still pending: `about.html`'s founder photo (`.split-media`, 1:1 -
-must be the real founder, never a stand-in), and every placeholder on
-`candidates.html` and `employers.html` (both currently just "Portal
-preview" mockup slots, not photography) and `people-consultancy.html`
-(no image slots exist on that page yet).
+Still pending: every placeholder on `candidates.html` and
+`employers.html` (both currently just "Portal preview" mockup slots,
+not photography) and `people-consultancy.html` (no image slots exist
+on that page yet).
 
 ## Founder photograph
 
-`about.html`'s "Our founder" section has its own dedicated placeholder,
-separate from the general photography above - do not fill it with a
-stand-in photo of anyone else. Replace it once the actual founder
-photograph and biography are supplied.
+Filled: `about.html`'s "Our founder" section now shows the real
+director, Mandy - `assets/images/photography/mm-recruitment-director-header.webp`.
+Unlike every other photo on this site, this one is a real photograph
+of a real MM Recruitment person, supplied directly, not AI-generated -
+do not replace it with a stand-in. The section's `.split-media` was
+switched from its placeholder `aspect-ratio:1/1` to `4/5` to match the
+supplied photo's native composition exactly (no cropping needed). The
+biography text in that section is still "Content pending" - out of
+scope for this image swap, untouched.
