@@ -266,7 +266,7 @@ a { color: var(--gold-dark); }
   aspect-ratio: 4 / 5;
   box-shadow: var(--shadow-soft);
 }
-.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 .hero-media .media-caption {
   position: absolute;
   left: 18px;
