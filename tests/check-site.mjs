@@ -87,6 +87,10 @@ for (const file of HTML_FILES) {
     }
   });
 
+  // --- No links to preview/staging deployments: customer-facing links
+  //     must use production domains (e.g. the portal's custom domain). ---
+  if (/href="https?:\/\/[^"]*\.pages\.dev/.test(html)) fail(file, 'links to a *.pages.dev preview deployment');
+
   // --- No leftover Lorem ipsum / template placeholder text ---
   if (/lorem ipsum/i.test(html)) fail(file, 'contains Lorem ipsum placeholder text');
 }
