@@ -1,0 +1,4 @@
+# The candidate and employer portals live on their own domain. These
+# old website addresses (previously placeholder pages) redirect there.
+/candidate-portal.html  https://portal.mmrecruitmentltd.co.uk/candidate-portal.html  301
+/employer-portal.html   https://portal.mmrecruitmentltd.co.uk/employer-portal.html   301
