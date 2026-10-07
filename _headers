@@ -9,3 +9,6 @@
 
 /employer-portal.html
   X-Robots-Tag: noindex
+
+/docs/*
+  X-Robots-Tag: noindex, nofollow
