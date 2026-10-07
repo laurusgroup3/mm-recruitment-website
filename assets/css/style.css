@@ -546,12 +546,12 @@ a { color: var(--gold-dark); }
   color: rgba(255,255,255,0.55);
 }
 .powered-by-los {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline;
   color: rgba(255,255,255,0.55);
 }
 .powered-by-los .los-mark { color: var(--champagne); font-weight: 600; }
+a.los-mark { text-decoration: none; }
+a.los-mark:hover, a.los-mark:focus-visible { text-decoration: underline; }
 
 /* -------------------------------------------------------------------
    Legal pages
