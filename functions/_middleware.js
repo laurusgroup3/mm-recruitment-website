@@ -2,8 +2,11 @@
 //
 // The site deploys the repository root, so without this, internal files
 // (project docs, the README, test scripts) would be readable at their URLs.
-// _routes.json sends only these paths (plus /api/*) through Functions; every
-// other request is served straight from static files and never reaches here.
+// Every request passes through this middleware (there is deliberately no
+// _routes.json): Cloudflare matches _routes.json against the raw URL but
+// decodes it when serving files, so an encoded path such as /%52EADME.md
+// would skip a route-limited Function and still reach the file. Here the
+// path is decoded before it is checked; public requests go straight on.
 // The source files stay in the repository - only public web access is removed.
 
 const PRIVATE_EXACT = new Set(["/README.md", "/docs", "/tests"]);

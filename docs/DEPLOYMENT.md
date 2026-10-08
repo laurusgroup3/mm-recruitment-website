@@ -12,9 +12,10 @@ Enquiry forms by email. No database, no authentication, no build step -
 Cloudflare Pages can serve this repository directly.
 
 Internal files are for the team only: `docs/`, `README.md` and `tests/`.
-`functions/_middleware.js` answers their URLs with the site's 404 page, and
-`_routes.json` limits Functions to those paths plus `/api/*`, so every other
-page is still served directly as a static file.
+`functions/_middleware.js` answers their URLs, including encoded variants,
+with the site's 404 page. Every request passes through it, so do not add a
+route-limiting `_routes.json`: Cloudflare would then let encoded paths reach
+the files.
 
 ## 1. Create the Cloudflare Pages project
 

@@ -20,7 +20,7 @@ const ctx = (path, { method = "GET", assets } = {}) => {
 const PRIVATE = [
   "/README.md", "/docs", "/docs/", "/docs/LOS-INTEGRATION-PROPOSAL.md", "/docs/DEPLOYMENT.md", "/docs/DESIGN-SYSTEM.md",
   "/tests", "/tests/", "/tests/check-site.mjs", "/tests/private-files.test.mjs",
-  "/%52EADME.md", "/docs%2FDEPLOYMENT.md", "//docs/DEPLOYMENT.md",
+  "/%52EADME.md", "/%64ocs/DEPLOYMENT.md", "/%74ests/check-site.mjs", "/docs%2FDEPLOYMENT.md", "/tests%2fcheck-site.mjs", "//docs/DEPLOYMENT.md",
 ];
 const PUBLIC = ["/", "/index.html", "/about", "/contact.html", "/assets/css/style.css", "/api/send-enquiry", "/docs-and-guides", "/testsuite"];
 
@@ -54,11 +54,9 @@ test("still a 404 if the 404 page itself can't be loaded; HEAD has no body", asy
   assert.equal(await head.text(), "");
 });
 
-test("_routes.json sends the private paths and the API through Functions", () => {
-  const routes = JSON.parse(readFileSync(new URL("../_routes.json", import.meta.url), "utf8"));
-  assert.equal(routes.version, 1);
-  for (const r of ["/api/*", "/docs", "/docs/*", "/README.md", "/tests", "/tests/*"]) assert.ok(routes.include.includes(r), r);
-  assert.ok(existsSync(new URL("../functions/api/send-enquiry.js", import.meta.url)), "the API route /api/* covers still exists");
+test("no _routes.json: every request, including encoded paths, reaches the middleware", () => {
+  assert.equal(existsSync(new URL("../_routes.json", import.meta.url)), false, "a route-limited _routes.json lets encoded paths bypass the check");
+  assert.ok(existsSync(new URL("../functions/api/send-enquiry.js", import.meta.url)));
 });
 
 test("the source files are kept in the repository", () => {
