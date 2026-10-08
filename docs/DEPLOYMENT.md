@@ -11,9 +11,10 @@ A static site (plain HTML/CSS/JS) plus one Cloudflare Pages Function
 Enquiry forms by email. No database, no authentication, no build step -
 Cloudflare Pages can serve this repository directly.
 
-The `docs/` folder is for the team only. `functions/docs/[[path]].js` makes every
-`/docs` URL answer with the site's 404 page, so these files are never publicly
-readable even though Pages serves the repository root.
+Internal files are for the team only: `docs/`, `README.md` and `tests/`.
+`functions/_middleware.js` answers their URLs with the site's 404 page, and
+`_routes.json` limits Functions to those paths plus `/api/*`, so every other
+page is still served directly as a static file.
 
 ## 1. Create the Cloudflare Pages project
 
