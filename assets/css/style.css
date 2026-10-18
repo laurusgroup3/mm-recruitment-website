@@ -186,6 +186,8 @@ a { color: var(--gold-dark); }
   gap: 12px;
   text-decoration: none;
   color: inherit;
+  /* Never let the nav squeeze the logo narrower than its own artwork. */
+  flex-shrink: 0;
 }
 
 /* The approved logo lockup (angel-and-daisy mark + "MM Recruitment"
@@ -195,9 +197,9 @@ a { color: var(--gold-dark); }
    text wordmark. */
 .logo-mark {
   display: inline-block;
-  height: 52px;
+  height: 68px;
 }
-.logo-mark img { height: 52px; width: auto; display: block; }
+.logo-mark img { height: 68px; width: auto; display: block; }
 
 .wordmark {
   font-family: var(--font-display);
@@ -613,10 +615,13 @@ a { color: var(--gold-dark); }
   .specialism-detail { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 720px) {
+/* The full nav (seven links plus two portal buttons) only fits beside
+   the logo from about 1180px up; below that the existing menu toggle
+   takes over rather than squeezing the logo or overflowing the page. */
+@media (max-width: 1180px) {
   .nav-links, .nav-cta .button { display: none; }
   .nav-toggle { display: flex; }
-  .logo-mark, .logo-mark img { height: 40px; }
+  .logo-mark, .logo-mark img { height: 60px; }
   #site-nav.is-open {
     display: flex;
     flex-direction: column;
@@ -631,6 +636,10 @@ a { color: var(--gold-dark); }
   }
   #site-nav.is-open .nav-cta { display: flex; flex-direction: column; align-items: stretch; }
   #site-nav.is-open .nav-cta .button { display: inline-flex; }
+}
+
+@media (max-width: 720px) {
+  .logo-mark, .logo-mark img { height: 48px; }
   .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .specialism-detail .specialism-actions { flex-direction: column; gap: 6px; }
