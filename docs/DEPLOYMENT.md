@@ -33,6 +33,8 @@ credentials exist):
 | `RESEND_API_KEY` | Enables the Contact/Employer Enquiry forms to actually send email. Without it, `send-enquiry.js` honestly reports "delivery unavailable" rather than pretending to send. |
 | `RESEND_FROM_ADDRESS` | e.g. `MM Recruitment Ltd <notifications@mmrecruitmentltd.co.uk>` - must be a domain verified in your Resend account (see step 4). |
 | `MM_ENQUIRY_NOTIFICATION_EMAIL` | The real mailbox enquiries should land in - to be confirmed by the business. |
+| `TURNSTILE_SITE_KEY` | Optional, recommended. Public site key of a Cloudflare Turnstile widget covering this site's hostnames; when set, the Contact and Employer Enquiry forms render the (normally invisible) Turnstile check. |
+| `TURNSTILE_SECRET_KEY` | **Secret.** The matching Turnstile secret. When set, `send-enquiry.js` refuses any submission without a valid Turnstile token. Set both keys or neither. Never commit it. |
 
 None of these exist yet in any environment - the forms will not
 actually deliver email until they're set.
@@ -81,3 +83,17 @@ Candidate/employer authentication, portals, and any LOS integration are
 Laurus Recruitment's Supabase project or Cloudflare Pages Functions to
 this site under any circumstances; MM Recruitment needs its own,
 entirely separate backend when that phase begins.
+
+## Security notes (25 October 2026 audit)
+
+- `functions/_middleware.js` answers 404 for internal files that would
+  otherwise be served from the repository root: `/README.md`, `/docs/*`,
+  `/tests/*`, any `*.md` file (including `assets/images/README.md`) and any
+  dotfile such as `/.env.example`. The files stay in the repository.
+- `/api/send-enquiry` only accepts JSON posted from this site's own origin
+  (or the production hostnames); other sites, missing or `null` Origins
+  are refused. Single-line fields have line breaks removed before they
+  reach the email subject. With `TURNSTILE_SECRET_KEY` set, a valid
+  Turnstile token is required.
+- `_headers` sends a Content-Security-Policy and HSTS for every path.
+

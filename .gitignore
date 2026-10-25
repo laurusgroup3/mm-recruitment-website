@@ -3,3 +3,7 @@
 node_modules/
 .DS_Store
 Thumbs.db
+.env.*
+!.env.example
+.dev.vars
+supabase/.temp/

@@ -646,3 +646,6 @@ a { color: var(--gold-dark); }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 }
+
+/* Cloudflare Turnstile container on the enquiry forms - only takes space when a widget is rendered. */
+.enquiry-turnstile:not(:empty) { margin: 0 0 1rem; }

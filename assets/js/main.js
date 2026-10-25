@@ -42,9 +42,54 @@
   // explicitly disabled in this phase - see candidate-portal.html/
   // employer-portal.html.
   // -------------------------------------------------------------------
+  // Cloudflare Turnstile (anti-spam), only when this environment has a
+  // site key configured (/api/enquiry-config). The widget is rendered
+  // in each form's [data-turnstile] container in "interaction-only"
+  // mode, so real visitors normally see nothing; the token it issues is
+  // sent with the submission and verified server-side. Without a site
+  // key the forms behave exactly as before.
+  var turnstileConfig = null;
+  var turnstileScriptPromise = null;
+  function getTurnstileConfig() {
+    if (!turnstileConfig) {
+      turnstileConfig = fetch('/api/enquiry-config', { cache: 'no-store' })
+        .then(function (res) { return res.ok ? res.json() : {}; })
+        .then(function (body) { return (body && body.turnstileSiteKey) || null; })
+        .catch(function () { return null; });
+    }
+    return turnstileConfig;
+  }
+  function loadTurnstileScript() {
+    if (window.turnstile) return Promise.resolve(window.turnstile);
+    if (!turnstileScriptPromise) {
+      turnstileScriptPromise = new Promise(function (resolve) {
+        var s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        s.async = true;
+        s.defer = true;
+        s.onload = function () { resolve(window.turnstile || null); };
+        s.onerror = function () { resolve(null); };
+        document.head.appendChild(s);
+      });
+    }
+    return turnstileScriptPromise;
+  }
+
   document.querySelectorAll('form[data-enquiry-form]').forEach(function (form) {
     var submitBtn = form.querySelector('button[type="submit"]');
     var messageEl = form.querySelector('.form-message');
+    var turnstileEl = form.querySelector('[data-turnstile]');
+    var widgetId = null;
+
+    if (turnstileEl) {
+      getTurnstileConfig().then(function (siteKey) {
+        if (!siteKey) return;
+        loadTurnstileScript().then(function (ts) {
+          if (!ts || widgetId !== null) return;
+          widgetId = ts.render(turnstileEl, { sitekey: siteKey, action: 'enquiry', appearance: 'interaction-only', theme: 'light' });
+        });
+      });
+    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -55,6 +100,8 @@
       var formType = form.getAttribute('data-enquiry-form');
       var data = {};
       new FormData(form).forEach(function (value, key) { data[key] = value; });
+      delete data['cf-turnstile-response'];
+      var turnstileToken = widgetId !== null && window.turnstile ? window.turnstile.getResponse(widgetId) : '';
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('is-loading'); }
       messageEl.textContent = 'Sending…';
@@ -62,7 +109,7 @@
       fetch('/api/send-enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formType: formType, fields: data }),
+        body: JSON.stringify({ formType: formType, fields: data, turnstileToken: turnstileToken || undefined }),
       })
         .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
         .then(function (result) {
@@ -81,6 +128,7 @@
         })
         .finally(function () {
           if (submitBtn) { submitBtn.disabled = false; submitBtn.classList.remove('is-loading'); }
+          if (widgetId !== null && window.turnstile) { try { window.turnstile.reset(widgetId); } catch (err) { /* widget gone */ } }
         });
     });
   });
