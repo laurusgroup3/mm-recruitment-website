@@ -13,6 +13,7 @@
 // length cap, and same-origin-only CORS (matches every other Laurus
 // Group public Function's convention).
 import { sendEnquiryEmail, renderEnquiryEmailHtml } from './_shared/email.js';
+import { isAllowedOrigin, readJsonBody, looksLikeLinkSpam, turnstileEnabled, verifyTurnstile } from './_shared/abuse.js';
 
 const MAX_FIELD_LENGTH = 4000;
 const ALLOWED_FORM_TYPES = ['contact', 'employer'];
@@ -25,12 +26,17 @@ export async function onRequestPost(context) {
   const { request, env } = context;
   const headers = corsHeaders(request);
 
-  let payload;
-  try {
-    payload = await request.json();
-  } catch {
-    return jsonResponse({ error: 'invalid-request' }, 400, headers);
+  // Browser-only, same-site-only. A missing or foreign Origin is a
+  // script or a cross-site relay, never a real visitor on this site.
+  if (!isAllowedOrigin(request)) {
+    return jsonResponse({ error: 'forbidden' }, 403, headers);
   }
+
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) {
+    return jsonResponse({ error: 'invalid-request' }, parsed.status, headers);
+  }
+  const payload = parsed.payload && typeof parsed.payload === 'object' ? parsed.payload : {};
 
   const formType = String(payload.formType || '');
   if (!ALLOWED_FORM_TYPES.includes(formType)) {
@@ -59,6 +65,18 @@ export async function onRequestPost(context) {
   }
   if (!consent) {
     return jsonResponse({ error: 'consent-required', message: 'Please confirm you are happy for us to contact you about your enquiry.' }, 400, headers);
+  }
+  if (looksLikeLinkSpam(message) || looksLikeLinkSpam(name)) {
+    return jsonResponse({ error: 'too-many-links', message: 'Please remove most of the links from your message, or email us directly.' }, 400, headers);
+  }
+  if (turnstileEnabled(env)) {
+    const verdict = await verifyTurnstile(env, request, payload.turnstileToken);
+    if (verdict === 'unavailable') {
+      return jsonResponse({ error: 'verification-unavailable', message: "We couldn't verify your submission right now - please try again shortly, or email us directly." }, 503, headers);
+    }
+    if (verdict !== 'ok') {
+      return jsonResponse({ error: 'verification-failed', message: 'Please complete the verification check and try again.' }, 403, headers);
+    }
   }
 
   const isEmployer = formType === 'employer';
