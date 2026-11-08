@@ -46,8 +46,8 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: true }, 200, headers);
   }
 
-  const name = String(fields.name || '').trim().slice(0, 200);
-  const email = String(fields.email || '').trim().slice(0, 320);
+  const name = singleLine(String(fields.name || '')).slice(0, 200);
+  const email = singleLine(String(fields.email || '')).slice(0, 320);
   const message = String(fields.message || '').trim().slice(0, MAX_FIELD_LENGTH);
   const consent = fields.consent === 'on' || fields.consent === true;
 
@@ -105,12 +105,28 @@ function jsonResponse(body, status, extraHeaders) {
 }
 
 function corsHeaders(request) {
+  // Only the production site and this request's own origin (which
+  // covers this project's own preview deployments) may call the
+  // endpoint from a browser. Previously any *.pages.dev origin was
+  // trusted - that is every Cloudflare Pages site on the internet, so
+  // any third party could relay enquiries through visitors' browsers.
   const origin = request.headers.get('Origin') || '';
   const allowed = ['https://mmrecruitmentltd.co.uk', 'https://www.mmrecruitmentltd.co.uk'];
-  const isPreview = /\.pages\.dev$/.test(new URL(origin || 'https://none.invalid').hostname || '');
-  const headers = { 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
-  if (allowed.includes(origin) || isPreview) {
+  let sameOrigin = false;
+  try {
+    sameOrigin = !!origin && origin === new URL(request.url).origin;
+  } catch {
+    sameOrigin = false;
+  }
+  const headers = { 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' };
+  if (allowed.includes(origin) || sameOrigin) {
     headers['Access-Control-Allow-Origin'] = origin;
   }
   return headers;
+}
+
+// Header-safe single line: no CR/LF or other control characters in
+// values that end up in the email subject or reply-to.
+function singleLine(value) {
+  return String(value).replace(/[\u0000-\u001f\u007f]+/g, ' ').trim();
 }
