@@ -42,7 +42,41 @@
   // explicitly disabled in this phase - see candidate-portal.html/
   // employer-portal.html.
   // -------------------------------------------------------------------
-  document.querySelectorAll('form[data-enquiry-form]').forEach(function (form) {
+  // Cloudflare Turnstile: rendered only when /api/enquiry-config returns
+  // a site key (i.e. Turnstile is configured for this environment).
+  var enquiryForms = document.querySelectorAll('form[data-enquiry-form]');
+  var turnstileReady = null;
+  function loadTurnstile(siteKey) {
+    if (turnstileReady) return turnstileReady;
+    turnstileReady = new Promise(function (resolve) {
+      window.mmTurnstileLoaded = function () { resolve(window.turnstile); };
+      var s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=mmTurnstileLoaded';
+      s.async = true;
+      s.defer = true;
+      s.onerror = function () { resolve(null); };
+      document.head.appendChild(s);
+    });
+    return turnstileReady.then(function (ts) {
+      if (!ts) return null;
+      enquiryForms.forEach(function (form) {
+        var slot = document.createElement('div');
+        slot.className = 'form-turnstile';
+        var btn = form.querySelector('button[type="submit"]');
+        form.insertBefore(slot, btn || null);
+        form.mmTurnstileId = ts.render(slot, { sitekey: siteKey, action: 'enquiry' });
+      });
+      return ts;
+    });
+  }
+  if (enquiryForms.length) {
+    fetch('/api/enquiry-config')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (cfg) { if (cfg && cfg.turnstileSiteKey) loadTurnstile(cfg.turnstileSiteKey); })
+      .catch(function () {});
+  }
+
+  enquiryForms.forEach(function (form) {
     var submitBtn = form.querySelector('button[type="submit"]');
     var messageEl = form.querySelector('.form-message');
 
@@ -54,7 +88,8 @@
 
       var formType = form.getAttribute('data-enquiry-form');
       var data = {};
-      new FormData(form).forEach(function (value, key) { data[key] = value; });
+      new FormData(form).forEach(function (value, key) { if (key !== 'cf-turnstile-response') data[key] = value; });
+      var turnstileToken = (window.turnstile && form.mmTurnstileId !== undefined) ? window.turnstile.getResponse(form.mmTurnstileId) : undefined;
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('is-loading'); }
       messageEl.textContent = 'Sending…';
@@ -62,7 +97,7 @@
       fetch('/api/send-enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formType: formType, fields: data }),
+        body: JSON.stringify({ formType: formType, fields: data, turnstileToken: turnstileToken }),
       })
         .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
         .then(function (result) {
@@ -80,6 +115,8 @@
           messageEl.classList.add('is-error');
         })
         .finally(function () {
+          // Turnstile tokens are single-use: get a fresh one for any retry.
+          if (window.turnstile && form.mmTurnstileId !== undefined) window.turnstile.reset(form.mmTurnstileId);
           if (submitBtn) { submitBtn.disabled = false; submitBtn.classList.remove('is-loading'); }
         });
     });

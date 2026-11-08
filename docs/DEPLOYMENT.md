@@ -33,6 +33,8 @@ credentials exist):
 | `RESEND_API_KEY` | Enables the Contact/Employer Enquiry forms to actually send email. Without it, `send-enquiry.js` honestly reports "delivery unavailable" rather than pretending to send. |
 | `RESEND_FROM_ADDRESS` | e.g. `MM Recruitment Ltd <notifications@mmrecruitmentltd.co.uk>` - must be a domain verified in your Resend account (see step 4). |
 | `MM_ENQUIRY_NOTIFICATION_EMAIL` | The real mailbox enquiries should land in - to be confirmed by the business. |
+| `TURNSTILE_SITE_KEY` | Optional. Public site key of a Cloudflare Turnstile widget for `mmrecruitmentltd.co.uk` (+ `www`). Served to the browser by `/api/enquiry-config`. |
+| `TURNSTILE_SECRET_KEY` | Optional, **encrypted** variable. Turnstile secret, used only server-side for siteverify. Turnstile is enforced only when **both** Turnstile variables are set, so setting one alone changes nothing. |
 
 None of these exist yet in any environment - the forms will not
 actually deliver email until they're set.
@@ -73,7 +75,57 @@ been reviewed and approved.
 - [ ] Sitemap/robots.txt URLs match the final domain (already set to
       `mmrecruitmentltd.co.uk` - update if the domain changes).
 
-## 6. What is deliberately NOT part of this deployment
+## 6. Enquiry form spam and abuse protection
+
+Always on in code (no configuration):
+
+- Requests must carry a browser `Origin` of the production site or of
+  the deployment itself; scripts and cross-site relays get 403.
+- JSON only, body capped at 16 KB before parsing.
+- Hidden honeypot field; more than 3 links or BBCode/HTML links are
+  rejected with an honest message.
+- Name/email are stripped of control characters (no header injection);
+  every field is HTML-escaped in the staff email.
+
+Needs dashboard configuration (each one is a live change; get approval):
+
+1. **Rate limit** - Security → WAF → Rate limiting rules on the
+   `mmrecruitmentltd.co.uk` zone: when URI path equals
+   `/api/send-enquiry` and method is `POST`, count by IP, 5 requests per
+   10 minutes, action Block for 10 minutes.
+2. **Turnstile** - create a Managed widget for `mmrecruitmentltd.co.uk`
+   and `www.mmrecruitmentltd.co.uk`, then set `TURNSTILE_SITE_KEY` and
+   `TURNSTILE_SECRET_KEY` together (Production), and redeploy. The CSP in
+   `_headers` already allows `https://challenges.cloudflare.com`. To test
+   on a Preview first, add the preview hostname to the widget and set
+   Cloudflare's published test keys on the Preview environment only.
+
+Tests: `node tests/enquiry-api.test.mjs` (17 checks) and, with Python
+Playwright, `python3 tests/browser/enquiry_e2e.py` and
+`python3 tests/browser/turnstile_on_e2e.py` (real Functions, email
+stubbed, desktop and mobile).
+
+## 7. The failing "Workers Builds" check
+
+Two Cloudflare projects are connected to this repository: the **Pages**
+project `mm-recruitment-website` (deploys every branch successfully;
+this is the pipeline this document describes) and a separate **Worker**
+also named `mm-recruitment-website` (created 26 Sep 2026, last deployed
+18 Oct 2026). The repository has no `wrangler.toml`/`wrangler.jsonc`.
+The Worker's build check succeeds on `main` but fails on every non-main
+branch in under a second, with no build output - it is rejected before
+any build runs, i.e. a project setting, not this code. It has failed on
+every PR since PR #2.
+
+Recommended fix (dashboard, needs approval): first confirm in Workers &
+Pages → the custom domains tab of each project which one actually
+serves `mmrecruitmentltd.co.uk`. If it is the Pages project, open the
+Worker → Settings → Build and either disconnect the Git repository or
+turn off non-production branch builds. Do **not** add a Wrangler config
+to this repo to make the check pass: the Worker's production build runs
+on every push to `main`, so that would change what the Worker deploys.
+
+## 8. What is deliberately NOT part of this deployment
 
 Candidate/employer authentication, portals, and any LOS integration are
 **not** part of this Phase 1 deployment - see

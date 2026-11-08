@@ -646,3 +646,6 @@ a { color: var(--gold-dark); }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 }
+
+/* Cloudflare Turnstile widget slot (only rendered when enabled) */
+.form-turnstile { margin: 0 0 16px; min-height: 0; }

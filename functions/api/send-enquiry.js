@@ -13,6 +13,7 @@
 // length cap, and same-origin-only CORS (matches every other Laurus
 // Group public Function's convention).
 import { sendEnquiryEmail, renderEnquiryEmailHtml } from './_shared/email.js';
+import { isAllowedOrigin, readJsonBody, looksLikeLinkSpam, turnstileEnabled, verifyTurnstile } from './_shared/abuse.js';
 
 const MAX_FIELD_LENGTH = 4000;
 const ALLOWED_FORM_TYPES = ['contact', 'employer'];
@@ -25,12 +26,17 @@ export async function onRequestPost(context) {
   const { request, env } = context;
   const headers = corsHeaders(request);
 
-  let payload;
-  try {
-    payload = await request.json();
-  } catch {
-    return jsonResponse({ error: 'invalid-request' }, 400, headers);
+  // Browser-only, same-site-only. A missing or foreign Origin is a
+  // script or a cross-site relay, never a real visitor on this site.
+  if (!isAllowedOrigin(request)) {
+    return jsonResponse({ error: 'forbidden' }, 403, headers);
   }
+
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) {
+    return jsonResponse({ error: 'invalid-request' }, parsed.status, headers);
+  }
+  const payload = parsed.payload && typeof parsed.payload === 'object' ? parsed.payload : {};
 
   const formType = String(payload.formType || '');
   if (!ALLOWED_FORM_TYPES.includes(formType)) {
@@ -46,8 +52,8 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: true }, 200, headers);
   }
 
-  const name = String(fields.name || '').trim().slice(0, 200);
-  const email = String(fields.email || '').trim().slice(0, 320);
+  const name = singleLine(String(fields.name || '')).slice(0, 200);
+  const email = singleLine(String(fields.email || '')).slice(0, 320);
   const message = String(fields.message || '').trim().slice(0, MAX_FIELD_LENGTH);
   const consent = fields.consent === 'on' || fields.consent === true;
 
@@ -59,6 +65,18 @@ export async function onRequestPost(context) {
   }
   if (!consent) {
     return jsonResponse({ error: 'consent-required', message: 'Please confirm you are happy for us to contact you about your enquiry.' }, 400, headers);
+  }
+  if (looksLikeLinkSpam(message) || looksLikeLinkSpam(name)) {
+    return jsonResponse({ error: 'too-many-links', message: 'Please remove most of the links from your message, or email us directly.' }, 400, headers);
+  }
+  if (turnstileEnabled(env)) {
+    const verdict = await verifyTurnstile(env, request, payload.turnstileToken);
+    if (verdict === 'unavailable') {
+      return jsonResponse({ error: 'verification-unavailable', message: "We couldn't verify your submission right now - please try again shortly, or email us directly." }, 503, headers);
+    }
+    if (verdict !== 'ok') {
+      return jsonResponse({ error: 'verification-failed', message: 'Please complete the verification check and try again.' }, 403, headers);
+    }
   }
 
   const isEmployer = formType === 'employer';
@@ -105,12 +123,28 @@ function jsonResponse(body, status, extraHeaders) {
 }
 
 function corsHeaders(request) {
+  // Only the production site and this request's own origin (which
+  // covers this project's own preview deployments) may call the
+  // endpoint from a browser. Previously any *.pages.dev origin was
+  // trusted - that is every Cloudflare Pages site on the internet, so
+  // any third party could relay enquiries through visitors' browsers.
   const origin = request.headers.get('Origin') || '';
   const allowed = ['https://mmrecruitmentltd.co.uk', 'https://www.mmrecruitmentltd.co.uk'];
-  const isPreview = /\.pages\.dev$/.test(new URL(origin || 'https://none.invalid').hostname || '');
-  const headers = { 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
-  if (allowed.includes(origin) || isPreview) {
+  let sameOrigin = false;
+  try {
+    sameOrigin = !!origin && origin === new URL(request.url).origin;
+  } catch {
+    sameOrigin = false;
+  }
+  const headers = { 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' };
+  if (allowed.includes(origin) || sameOrigin) {
     headers['Access-Control-Allow-Origin'] = origin;
   }
   return headers;
+}
+
+// Header-safe single line: no CR/LF or other control characters in
+// values that end up in the email subject or reply-to.
+function singleLine(value) {
+  return String(value).replace(/[\u0000-\u001f\u007f]+/g, ' ').trim();
 }
